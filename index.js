@@ -57,6 +57,21 @@ app.post('/',(req,res)=>{
     })
 
 })
+
+app.get('/url/:shorturl',(req,res)=>{
+    console.log(req.params.shorturl);
+    mongoClient.connect(url,(err,client)=>{
+        if(err) throw err;
+        let db = client.db('urldb');
+        db.collection('urlShortener').findOne({"short":req.params.shorturl},(err,data)=>{
+            client.close();
+            console.log(data.long)
+            res.redirect(data.long)
+            
+        })
+    })
+})
+
 app.get('/url',(req,res)=>{
     mongoClient.connect(url,(err,client)=>{
         if(err) throw err;
